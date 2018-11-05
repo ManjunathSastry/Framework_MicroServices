@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.amadeus.sentinel.discovery.entitites.ServiceInstance"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="org.omg.CORBA.ServiceInformationHolder"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="com.mashape.unirest.http.Unirest"/>
+<fullyQualifiedTypeName name="com.mashape.unirest.http.JsonNode"/>
+<fullyQualifiedTypeName name="com.mashape.unirest.http.HttpResponse"/>
+<fullyQualifiedTypeName name="com.mashape.unirest.http.exceptions.UnirestException"/>
+<fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+<fullyQualifiedTypeName name="com.amadeus.sentinel.services.ObeDataService"/>
+<fullyQualifiedTypeName name="com.amadeus.sentinel.services.impl.ObeDataServiceImpl"/>
+<fullyQualifiedTypeName name="com.amadeus.sentinel.models.ServiceInstance"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
+</qualifiedTypeNameHistroy>

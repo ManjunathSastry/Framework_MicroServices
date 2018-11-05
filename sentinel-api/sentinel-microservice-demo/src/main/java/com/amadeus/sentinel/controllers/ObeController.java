@@ -1,0 +1,153 @@
+package com.amadeus.sentinel.controllers;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.validation.Validation;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.amadeus.sentinel.exceptions.InvalidRequestParametersException;
+import com.amadeus.sentinel.exceptions.ObeNotFoundException;
+import com.amadeus.sentinel.exceptions.ServiceUnavailableException;
+import com.amadeus.sentinel.models.Obe;
+import com.amadeus.sentinel.services.ObeDataService;
+import com.amadeus.sentinel.validators.ValidationUtils;
+
+/**
+ * REST service using Spring REST
+ * 
+ * @author sinhas
+ *
+ */
+@RestController
+public class ObeController {
+
+	@Autowired
+	private ObeDataService obeDataService;
+
+//	/**
+//	 * Mirroring Data using GET Request
+//	 * 
+//	 * @param obe
+//	 * @return
+//	 * @throws InterruptedException
+//	 */
+//	@RequestMapping(value = "/mirrorData", method = RequestMethod.POST)
+//	public Obe mirrorIncomingData(@RequestBody Obe obe) throws InterruptedException {
+//		TimeUnit.SECONDS.sleep(5);
+//		return obe;
+//	}
+//
+//	/**
+//	 * Mirroring Data using POST Request
+//	 * 
+//	 * @param obe
+//	 * @param startDate
+//	 * @param endDate
+//	 * @return
+//	 * @throws InterruptedException
+//	 */
+//	@RequestMapping(value = "/mirrorData", method = RequestMethod.GET)
+//	public Obe mirrorIncomingDataGet(@RequestParam String obe, @RequestParam String startDate,
+//			@RequestParam String endDate) throws InterruptedException {
+//		TimeUnit.SECONDS.sleep(5);
+//		return new Obe(obe, startDate, endDate);
+//	}
+
+	/**
+	 * Returns specific Obe if obe name specified else returns all the obe
+	 * 
+	 * @param obe
+	 * @return
+	 * @throws ObeNotFoundException
+	 * @throws ServiceUnavailableException
+	 */
+	@RequestMapping(value = "/getObe", method = RequestMethod.GET)
+	public List<Obe> getObe(@RequestParam(value = "obe", required = false) String obe)
+			throws ObeNotFoundException, ServiceUnavailableException {
+		List<Obe> listToReturn;
+		if (ValidationUtils.checkForNullObjects(obeDataService)) {
+			throw new ServiceUnavailableException("Obe Service Not Defined");
+		}
+		if (obe == null) {
+			listToReturn = obeDataService.getAllObe();
+		} else {
+			Obe retrievedJsonDto = obeDataService.getObeForObeName(obe);
+			if (retrievedJsonDto == null)
+				throw new ObeNotFoundException("Obe Not Found");
+			listToReturn = Collections.singletonList(retrievedJsonDto);
+		}
+		return listToReturn;
+	}
+
+	/**
+	 * Updates obe if obe name is valid.
+	 * 
+	 * @param obe
+	 * @param newData
+	 * @return
+	 * @throws ObeNotFoundException
+	 * @throws InvalidRequestParametersException
+	 * @throws ServiceUnavailableException
+	 */
+	@RequestMapping(value = "/updateObe", method = RequestMethod.POST)
+	public String updateObeByName(@RequestParam String obe, @RequestBody Map<String, String> newData)
+			throws ObeNotFoundException, InvalidRequestParametersException, ServiceUnavailableException {
+		if (ValidationUtils.checkForNullObjects(obeDataService)) {
+			throw new ServiceUnavailableException("Obe Service Not Defined");
+		}
+		String validationMessage = ValidationUtils.checkValidUpdateRequestBody(newData);
+		if (validationMessage.length() > 0) {
+			throw new InvalidRequestParametersException(validationMessage);
+		}
+
+		// Handle request only if Valid
+		Boolean status = obeDataService.updateObeForName(obe, newData); // status value for internal failure
+		if (!status) {
+			throw new ServiceUnavailableException("Unable to update obe");
+		} else {
+			return "{\"message\":\"success\"}";
+		}
+
+	}
+
+	/**
+	 * Adds New Obe
+	 * 
+	 * @param obe
+	 * @return
+	 * @throws InvalidRequestParametersException
+	 * @throws ServiceUnavailableException
+	 */
+	@RequestMapping(value = "/addObe", method = RequestMethod.PUT)
+	public String addNewObe(@RequestBody Obe obe)
+			throws InvalidRequestParametersException, ServiceUnavailableException {
+		if (ValidationUtils.checkForNullObjects(obeDataService)) {
+			throw new ServiceUnavailableException("Obe Service Not Defined");
+		}
+		String validationMessage = ValidationUtils.checkValidAddRequestBody(obe);
+		if (validationMessage.length() > 0) {
+			throw new InvalidRequestParametersException(validationMessage);
+		}
+		Boolean status = obeDataService.addNewObe(obe); // status value for internal failure
+		if (!status) {
+			throw new ServiceUnavailableException("Unable to create obe");
+		} else {
+			return "{\"message\":\"success\"}";
+		}
+	}
+	
+	@RequestMapping(value="/sightline", method = RequestMethod.GET)
+	public Object getSightlineData() {
+		return null;
+	}
+
+}

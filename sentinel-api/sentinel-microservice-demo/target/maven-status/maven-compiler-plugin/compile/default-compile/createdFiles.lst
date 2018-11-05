@@ -1,0 +1,12 @@
+com\amadeus\spring_boot_demo\services\ObeDataService.class
+com\amadeus\spring_boot_demo\controller\JerseyRestDemo.class
+com\amadeus\spring_boot_demo\App.class
+com\amadeus\spring_boot_demo\JerseyConfiguration.class
+com\amadeus\spring_boot_demo\models\JsonDto.class
+com\amadeus\spring_boot_demo\GenericExceptionMapper.class
+com\amadeus\spring_boot_demo\exceptions\InvalidRequestParameters.class
+com\amadeus\spring_boot_demo\exceptions\ObeNotFoundException.class
+com\amadeus\spring_boot_demo\controller\SpringBootRestDemo.class
+com\amadeus\spring_boot_demo\LogAspect.class
+com\amadeus\spring_boot_demo\services\ObeDataServiceImpl.class
+com\amadeus\spring_boot_demo\ValidationUtils.class
